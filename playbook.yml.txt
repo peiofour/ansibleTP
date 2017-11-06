@@ -1,0 +1,12 @@
+---
+- hosts: webservers
+  user: root
+  name: niginx servers
+  tasks:
+        - name: install nginx
+          apt: name=nginx update_cache=yes
+
+        - name: execute nginx service
+          shell: service nginx restart
+
+...
