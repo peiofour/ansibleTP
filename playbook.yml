@@ -1,4 +1,4 @@
----
+﻿---
 - hosts: webservers
   user: root
   name: niginx servers
