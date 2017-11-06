@@ -1,12 +1,51 @@
-﻿---
+---
 - hosts: webservers
   user: root
   name: niginx servers
   tasks:
         - name: install nginx
-          apt: name=nginx update_cache=yes
+          apt: name=nginx
 
         - name: execute nginx service
+          shell: service nginx start
+
+
+        - name: install nodejs and npm
+          apt: name=nodejs
+
+        - name: install npm
+          apt: name=npm state=latest
+
+
+        - name: update npm
+          shell: /usr/bin/npm install npm@latest -g
+
+        - name: install git
+          apt: name=git
+
+        - name: clone nodejs git repository
+          git:
+                  repo: https://git.mrzee.fr/student/my-node-project.git
+                  dest: /var/www/my-node-project
+
+        - name: install npm dependencies
+          npm:
+                  path: /var/www/my-node-project/myapp
+
+
+        - name: install pm2
+          shell: npm install pm2 -g
+
+        - name: starting app with pm2
+          shell: pm2 start -f /var/www/my-node-project/myapp/bin/www
+
+        - name: copying vhost file to repo
+          shell: cp /var/www/my-node-project/vhost /etc/nginx/sites-enabled/default
+
+        - name: restart nginx
           shell: service nginx restart
+
+
+
 
 ...
